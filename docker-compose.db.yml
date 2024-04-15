@@ -1,0 +1,23 @@
+# docker-compose.yml file content
+version: "3.9"
+services:
+  db-postgres:
+    image: postgres:15
+    container_name: ${APP_ENV}-db-postgres
+    command: >
+      -c max_connections=1000
+      -c shared_buffers=1GB
+    restart: always
+    ports:
+      - "${POSTGRES_MOUNT_PORT}:5432"
+    env_file:
+      - .env
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    name: ${APP_ENV}-${APP_NAME}-app-network
+    driver: bridge
+    ipam:
+      driver: default
